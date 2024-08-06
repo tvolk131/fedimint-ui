@@ -13,6 +13,12 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalBody,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  Container,
+  Card,
 } from '@chakra-ui/react';
 import { GatewayInfo, FederationInfo } from '@fedimint/types';
 import { FederationCard, ConnectFederation } from './components';
@@ -164,6 +170,14 @@ export const App = React.memo(function Admin(): JSX.Element {
             {t('connect-federation.connect-federation-button')}
           </Button>
         </Flex>
+        <Card w='max-content' p={2} marginBlock={2} height='max-content'>
+          <Stat>
+            <StatLabel>
+              {gatewayInfo.synced_to_chain ? '🟢' : '🔴'} Block Height
+            </StatLabel>
+            <StatNumber>{gatewayInfo.block_height}</StatNumber>
+          </Stat>
+        </Card>
         <Modal isOpen={showConnectFed} onClose={() => setShowConnectFed(false)}>
           <ModalOverlay />
           <ModalContent>
