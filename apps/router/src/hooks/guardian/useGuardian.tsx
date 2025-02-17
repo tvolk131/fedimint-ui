@@ -12,21 +12,14 @@ import { GuardianServerStatus } from '@fedimint/types';
 import { formatApiErrorMessage } from '../../guardian-ui/utils/api';
 import { useAppContext } from '..';
 
-export function useAppGuardianConfigs(): GuardianConfig[] {
-  const { guardians } = useAppContext();
-  if (!guardians) return [];
-  return Object.values(guardians).map((guardian) => guardian.config);
-}
+export const useGuardianConfig = (): GuardianConfig => {
+  const { service } = useAppContext();
 
-export function useNumberOfGuardians(): number {
-  return Object.keys(useAppContext().guardians).length;
-}
-
-export const useGuardianConfig = (id: string): GuardianConfig => {
-  const { guardians } = useAppContext();
-  if (!guardians[id])
+  if (!service) {
     throw new Error('useGuardianConfig must be used with a selected guardian');
-  return guardians[id].config;
+  }
+
+  return service.config;
 };
 
 export const useGuardianDispatch = (): Dispatch<GuardianAppAction> => {

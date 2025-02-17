@@ -1,21 +1,21 @@
-import React from 'react';
-import { Flex, useTheme, Link } from '@chakra-ui/react';
-import { getVersionInfo } from '@fedimint/router/src/constants/Version';
+import React, { ReactElement } from 'react';
+import { Flex, useTheme, Link, Icon } from '@chakra-ui/react';
+import { FaDiscord, FaGithub } from 'react-icons/fa';
+import { LATEST_RELEASE_TAG } from '../constants';
 
 export const Footer = () => {
   const theme = useTheme();
-  const version = getVersionInfo();
 
   interface CustomLinkProps {
     href: string;
-    title: string;
+    children: string | ReactElement;
   }
 
-  const CustomLink = ({ href, title }: CustomLinkProps) => {
+  const CustomLink = ({ href, children }: CustomLinkProps) => {
     return (
       <Link
         _hover={{ textDecoration: 'underline' }}
-        fontSize={['sm', 'md']}
+        fontSize='sm'
         fontWeight='500'
         color={theme.colors.gray[800]}
         transition={`text-decoration 1s ease-in-out`}
@@ -24,7 +24,7 @@ export const Footer = () => {
         rel='noreferrer'
         w='fit-content'
       >
-        {title}
+        {children}
       </Link>
     );
   };
@@ -32,18 +32,31 @@ export const Footer = () => {
   return (
     <Flex
       bgColor={theme.colors.gray[100]}
-      p='20px'
+      p='15px'
       w='100%'
-      direction={{ base: 'column-reverse', sm: 'row' }}
       align='center'
-      justify='center'
+      justify='space-between'
+      position='fixed'
+      bottom='0'
     >
-      <Flex direction='row' alignItems='center' gap={['3', '6']}>
-        <CustomLink title='© Fedimint Devs' href='https://fedimint.org' />
-        <CustomLink title={version.display} href={version.url} />
-        <CustomLink title='Discord' href='https://chat.fedimint.org/' />
-        <CustomLink title='Github' href='https://github.com/fedimint' />
-      </Flex>
+      <CustomLink
+        href={`https://github.com/fedimint/ui/releases/tag/${LATEST_RELEASE_TAG}`}
+      >
+        {LATEST_RELEASE_TAG}
+      </CustomLink>
+      <CustomLink href='https://fedimint.org'>&copy; Fedimint</CustomLink>
+      <div>
+        <CustomLink href='https://chat.fedimint.org/'>
+          <Icon fontSize='24px' mr='2'>
+            <FaDiscord />
+          </Icon>
+        </CustomLink>
+        <CustomLink href='https://github.com/fedimint'>
+          <Icon fontSize='22px'>
+            <FaGithub />
+          </Icon>
+        </CustomLink>
+      </div>
     </Flex>
   );
 };

@@ -1,29 +1,19 @@
 import React, { createContext, Dispatch, ReactNode, useReducer } from 'react';
-import { GuardianConfig } from '../types/guardian';
-import { GatewayConfig } from '../types/gateway';
-
-export interface Guardian {
-  config: GuardianConfig;
-}
-
-export interface Gateway {
-  config: GatewayConfig;
-}
+import { LOCAL_STORAGE_APP_STATE_KEY } from '../constants';
+import { Service } from '../types';
 
 export interface AppContextValue {
-  guardians: Record<string, Guardian>;
-  gateways: Record<string, Gateway>;
+  service: Service | null;
   dispatch: Dispatch<AppAction>;
 }
 
 export const initialState: AppContextValue = {
-  guardians: {},
-  gateways: {},
+  service: null,
   dispatch: () => null,
 };
 
 const makeInitialState = (): AppContextValue => {
-  const storedState = localStorage.getItem('fedimint_ui_state');
+  const storedState = localStorage.getItem(LOCAL_STORAGE_APP_STATE_KEY);
   if (storedState) {
     try {
       const parsedState = JSON.parse(storedState);
@@ -39,55 +29,23 @@ const makeInitialState = (): AppContextValue => {
 };
 
 export enum APP_ACTION_TYPE {
-  SET_SELECTED_SERVICE = 'SET_SELECTED_SERVICE',
-  ADD_GUARDIAN = 'ADD_GUARDIAN',
-  ADD_GATEWAY = 'ADD_GATEWAY',
-  REMOVE_GUARDIAN = 'REMOVE_GUARDIAN',
-  REMOVE_GATEWAY = 'REMOVE_GATEWAY',
-  UPDATE_GUARDIAN = 'UPDATE_GUARDIAN',
-  UPDATE_GATEWAY = 'UPDATE_GATEWAY',
+  ADD_SERVICE = 'ADD_SERVICE',
+  REMOVE_SERVICE = 'REMOVE_SERVICE',
 }
 
 export type AppAction =
   | {
-      type: APP_ACTION_TYPE.ADD_GUARDIAN;
+      type: APP_ACTION_TYPE.ADD_SERVICE;
       payload: {
-        id: string;
-        service: Guardian;
+        service: Service;
       };
     }
   | {
-      type: APP_ACTION_TYPE.ADD_GATEWAY;
-      payload: {
-        id: string;
-        service: Gateway;
-      };
-    }
-  | {
-      type: APP_ACTION_TYPE.REMOVE_GUARDIAN;
-      payload: string;
-    }
-  | {
-      type: APP_ACTION_TYPE.REMOVE_GATEWAY;
-      payload: string;
-    }
-  | {
-      type: APP_ACTION_TYPE.UPDATE_GUARDIAN;
-      payload: {
-        id: string;
-        service: Guardian;
-      };
-    }
-  | {
-      type: APP_ACTION_TYPE.UPDATE_GATEWAY;
-      payload: {
-        id: string;
-        service: Gateway;
-      };
+      type: APP_ACTION_TYPE.REMOVE_SERVICE;
     };
 
 const saveToLocalStorage = (state: AppContextValue) => {
-  localStorage.setItem('fedimint_ui_state', JSON.stringify(state));
+  localStorage.setItem(LOCAL_STORAGE_APP_STATE_KEY, JSON.stringify(state));
 };
 
 const reducer = (
@@ -95,55 +53,15 @@ const reducer = (
   action: AppAction
 ): AppContextValue => {
   switch (action.type) {
-    case APP_ACTION_TYPE.ADD_GUARDIAN:
+    case APP_ACTION_TYPE.ADD_SERVICE:
       return {
         ...state,
-        guardians: {
-          ...state.guardians,
-          [action.payload.id]: action.payload.service,
-        },
+        service: action.payload.service,
       };
-    case APP_ACTION_TYPE.ADD_GATEWAY:
+    case APP_ACTION_TYPE.REMOVE_SERVICE:
       return {
         ...state,
-        gateways: {
-          ...state.gateways,
-          [action.payload.id]: action.payload.service,
-        },
-      };
-    case APP_ACTION_TYPE.REMOVE_GUARDIAN:
-      return {
-        ...state,
-        guardians: Object.fromEntries(
-          Object.entries(state.guardians).filter(
-            ([key]) => key !== action.payload
-          )
-        ),
-      };
-    case APP_ACTION_TYPE.REMOVE_GATEWAY:
-      return {
-        ...state,
-        gateways: Object.fromEntries(
-          Object.entries(state.gateways).filter(
-            ([key]) => key !== action.payload
-          )
-        ),
-      };
-    case APP_ACTION_TYPE.UPDATE_GUARDIAN:
-      return {
-        ...state,
-        guardians: {
-          ...state.guardians,
-          [action.payload.id]: action.payload.service,
-        },
-      };
-    case APP_ACTION_TYPE.UPDATE_GATEWAY:
-      return {
-        ...state,
-        gateways: {
-          ...state.gateways,
-          [action.payload.id]: action.payload.service,
-        },
+        service: null,
       };
   }
 };

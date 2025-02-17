@@ -10,15 +10,14 @@ import { GatewayApi } from '../../api/GatewayApi';
 import { GatewayInfo } from '@fedimint/types';
 import { useAppContext } from '..';
 
-export function useNumberOfGateways(): number {
-  return Object.keys(useAppContext().gateways).length;
-}
+export const useGatewayConfig = (): GatewayConfig => {
+  const { service } = useAppContext();
 
-export const useGatewayConfig = (id: string): GatewayConfig => {
-  const { gateways } = useAppContext();
-  if (!gateways[id])
+  if (!service) {
     throw new Error('useGatewayConfig must be used with a selected gateway');
-  return gateways[id].config;
+  }
+
+  return service.config;
 };
 
 export const useGatewayContext = () => {

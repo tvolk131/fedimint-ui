@@ -203,32 +203,15 @@
     "services": "Services",
     "addService": "Add a Service",
     "guardians": "Guardians",
-    "guardianUrl": "Guardian URL",
+    "guardian-url": "Guardian URL",
     "actions": "Actions",
     "view": "View",
     "gateways": "Gateways",
     "gatewayUrl": "Gateway URL",
-    "learn-more-link": "Learn more about Fedimint services",
+    "learn-more-link": "To learn more about Fedimint",
+    "contribute-link": "If you're interested in contributing to the Fedimint project",
     "connect-service-button": {
       "label": "Connect Service"
-    },
-    "connect-service-modal": {
-      "label": "Connect a Service",
-      "title": "Connect a Fedimint Service",
-      "url-label": "URL",
-      "helper-text": "Will be wss:// for guardian or https:// for gateway",
-      "service-type-label": "Service Type",
-      "service-name-label": "Service Name",
-      "sync-status-label": "Sync Status",
-      "service-exists-error": "Service already exists"
-    },
-    "remove-service-modal": {
-      "title": "Remove {{type}}",
-      "confirm": "Are you sure you want to remove this {{type}}?"
-    },
-    "edit-service-modal": {
-      "title": "Edit {{type}}",
-      "url-label": "URL"
     }
   },
   "login": {

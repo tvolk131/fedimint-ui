@@ -40,17 +40,13 @@ export function useAppInit(
 
       const service = getServiceType(url);
       if (!service) return;
-      const actionType =
-        service === 'guardian'
-          ? APP_ACTION_TYPE.ADD_GUARDIAN
-          : APP_ACTION_TYPE.ADD_GATEWAY;
+      const actionType = APP_ACTION_TYPE.ADD_SERVICE;
 
       const hash = await sha256Hash(url);
 
       dispatch({
         type: actionType,
         payload: {
-          id: hash,
           service: {
             config: {
               id: hash,
